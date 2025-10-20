@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" />
+    <script src="script.js"></script>
+    <title> Movimentação de personagem </title>
+</head>
+<body>
+   <canvas id="gameCanvas" width="960" height="540"></canvas>
+
+    <div id="livrodle-modal" class="modal-container">
+        <div class="livrodle-content">
+          <span class="close-button" id="close-modal-btn">&times;</span>
+            <div id="notificador"></div>
+
+            <h1 class="title">Livrodle</h1>
+
+            <div class="game-area">
+                <div class="coluna-esquerda">
+                     <h2 class="selecao-title">Adivinhe o Livro</h2>
+                     <div class="adivinhar-liv">
+                         <input type="text" class="adivinhar-entrada" id="adv-input" placeholder="Digite o nome do livro...">
+                         <div class="sugestoes" id="sugestoes-livros"></div>
+                         <button class="adv-btao" id="adv-btao">Adivinhar</button>
+                     </div>
+                </div>
+
+                <div class="coluna-direita">
+                    <h2 class="selecao-title">Seus Palpites</h2>
+                    <div class="registro-livros" id="area-registro">
+                        <div class="cabecalho-registro">
+                            <div class="item-cabecalho">Nome</div>
+                            <div class="item-cabecalho">Gênero</div>
+                            <div class="item-cabecalho">Ano</div>
+                            <div class="item-cabecalho">Páginas</div>
+                            <div class="item-cabecalho">Ambientação</div>
+                            <div class="item-cabecalho">Idioma</div>
+                        </div>
+                        <div id="registro-palpites">
+                           
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
