@@ -273,3 +273,17 @@
                 color: #5c4033;
             }
         }
+        
+
+      .game-area.fade-out, 
+      .coluna-esquerda.fade-out {
+          width: 0; 
+          padding: 0; 
+          margin: 0;
+          overflow: hidden; 
+      }
+      
+      .coluna-esquerda.fade-out + .coluna-direita {
+          width: 100%;
+      }
+      
