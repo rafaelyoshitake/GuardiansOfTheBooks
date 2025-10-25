@@ -1,5 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // A ESTRUTURA CORRETA: TODO O CÓDIGO DO JOGO VAI AQUI DENTRO
+  
+    const tituloModal = document.querySelector('.title');
+    const gameArea = document.querySelector('.game-area');
+    const colunaEsquerda = document.querySelector('.coluna-esquerda');
 
     // --- SETUP DOS CANVAS ---
     const canvas = document.getElementById('gameCanvas');
@@ -19,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     foregroundImage.src = 'https://uploads.onecompiler.io/43s2hj2ds/43zmzq89t/Estantes%20gotb.png';
     
     const CamadaImage = new Image();
-    CamadaImage.src = 'https://uploads.onecompiler.io/43s2hj2ds/43zmzq89t/Estantes%20gotb%201fc.png';
+    CamadaImage.src = 'https://uploads.onecompiler.io/43s2hj2ds/43zmzq89t/CamadaObjeto.png';
     
     const ObjImage = new Image();
     ObjImage.src = 'https://uploads.onecompiler.io/43s2hj2ds/43zmzq89t/Livros%20obj%20GOTB1.png';
@@ -32,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
         x: 500,
         y: 400, // Posição inicial visível
         width: 24,
-        height: 40,
+        height: 44,
         speed: 2,
         spriteWidth: 45,
         spriteHeight: 64,
@@ -45,16 +48,43 @@ document.addEventListener('DOMContentLoaded', () => {
     characterCanvas.width = player.spriteWidth * 2;
     characterCanvas.height = player.spriteHeight * 2;
 
-    const itemDourado = { x: 400, y: 250, width: 20, height: 35, color: 'gold' };
+    const LivroSec = { x: 170, y: 300, width: 5, height: 5, color: 'gold' };
     
     const obstaculos = [
-        { x: 0, y: 500, width: 225, height: 80 }, { x: 615, y: 500, width: 290, height: 80 },
-        { x: 900, y: 530, width: 110, height: 40 }, { x: 0, y: 15, width: 465, height: 80 },
-        { x: 540, y: 55, width: 60, height: 40 }, { x: 705, y: 15, width: 600, height: 80 },
-        { x: 0, y: 295, width: 400, height: 40 }, { x: 705, y: 190, width: 405, height: 40 },
+        // Estante inferior esquerda
+        { x: 0, y: 500, width: 225, height: 80 },
+        
+        //Estante inferior direita
+        { x: 615, y: 500, width: 290, height: 80 },
+        // Mini estante
+        { x: 900, y: 530, width: 110, height: 40 },
+        
+        // Estante superior esquerda
+        { x: 0, y: 15, width: 465, height: 85 },
+        
+        // Relogio
+        { x: 540, y: 55, width: 60, height: 40 },
+        
+        // Estante superior direita
+        { x: 705, y: 15, width: 600, height: 80 },
+        
+        // Estante meio
+        { x: 0, y: 295, width: 400, height: 40 },
+        
+        // Mini estante meio
+        { x: 705, y: 190, width: 405, height: 40 },
+        
+        // Mesa
         { x: 615, y: 365, width: 380, height: 40 },
         
+        // Mago
         { x: 650, y: 40, width: 40, height: 90 },
+        
+         // paredes
+        { x: 0, y: 0, width: 15, height: 1000 }, // Esquerda
+        { x: 1260, y: 0, width: 15, height: 1000 }, // Direita
+        { x: 0, y: 0, width: 2000, height: 20 }, // Cima
+        { x: 0, y: 710, width: 2000, height: 15 }, // Baixo
     ];
 
     // --- VARIÁVEIS DE ESTADO DO JOGO ---
@@ -62,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let animationFrameId = null;
     let isMoving = false;
     let gameFrame = 0;
+    let minigameCompleto = false;
 
     const keys = {
         'ArrowRight': false, 'ArrowLeft': false, 'ArrowUp': false, 'ArrowDown': false,
@@ -100,19 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
         characterCtx.restore();
     }
 
-    function drawBook() {
-        ctx.fillStyle = '#8a6d3b';
-        ctx.fillRect(itemDourado.x, itemDourado.y, itemDourado.width, itemDourado.height);
-        ctx.fillStyle = '#5c4033';
-        ctx.fillRect(itemDourado.x, itemDourado.y, 5, itemDourado.height);
-        ctx.fillStyle = '#fdf5e6';
-        ctx.fillRect(itemDourado.x + 5, itemDourado.y + 2, itemDourado.width - 5, itemDourado.height - 4);
-        ctx.fillStyle = '#d4af37';
-        ctx.beginPath();
-        ctx.arc(itemDourado.x + itemDourado.width / 2 + 2, itemDourado.y + itemDourado.height / 2, 5, 0, Math.PI * 2);
-        ctx.fill();
-    }
-    
     // --- LÓGICA DE ATUALIZAÇÃO ---
     function update() {
         let moveX = 0;
@@ -159,51 +177,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         gameFrame++;
         
-        const dx = (player.x + player.width / 2) - (itemDourado.x + itemDourado.width / 2);
-        const dy = (player.y + player.height / 2) - (itemDourado.y + itemDourado.height / 2);
+        const dx = (player.x + player.width / 2) - (LivroSec.x + LivroSec.width / 2);
+        const dy = (player.y + player.height / 2) - (LivroSec.y + LivroSec.height / 2);
         isPlayerNear = Math.sqrt(dx * dx + dy * dy) < 60;
     }
     
     // --- FUNÇÃO PRINCIPAL DE DESENHO ---
   function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // CHÃO
-        if (floorImage.complete) ctx.drawImage(floorImage, 0, 0, canvas.width, canvas.height);
-        drawBook();
-        
-        // ESTANTES 
-        if (foregroundImage.complete) ctx.drawImage(foregroundImage, 0, 0, canvas.width, canvas.height);
+    // 1. DESENHA O FUNDO E ELEMENTOS BASE
+    if (floorImage.complete) ctx.drawImage(floorImage, 0, 0, canvas.width, canvas.height);
+    if (foregroundImage.complete) ctx.drawImage(foregroundImage, 0, 0, canvas.width, canvas.height);
+    if (MagoImage.complete) ctx.drawImage(MagoImage, 0, 0, canvas.width, canvas.height);
 
-        if (MagoImage.complete) ctx.drawImage(MagoImage, 0, 0, canvas.width, canvas.height);
+    // 2. DESENHA OS OBJETOS QUE FICAM ATRÁS DO PERSONAGEM
+    if (ObjImage.complete) ctx.drawImage(ObjImage, 0, 0, canvas.width, canvas.height);
     
-        // Personagem
-        drawCharacterOnBuffer();
-        ctx.drawImage(
-            characterCanvas,
-            player.x - AJUSTE_X - (player.spriteWidth / 2),
-            player.y - AJUSTE_Y
-        );
-        
-        // CAMADA 
-        if (CamadaImage.complete) ctx.drawImage(CamadaImage, 0, 0, canvas.width, canvas.height);
+    // 3. DESENHA O PERSONAGEM
+    drawCharacterOnBuffer();
+    ctx.drawImage(
+        characterCanvas,
+        player.x - AJUSTE_X - (player.spriteWidth / 2),
+        player.y - AJUSTE_Y
+    );
+    
+    if (CamadaImage.complete) ctx.drawImage(CamadaImage, 0, 0, canvas.width, canvas.height);
 
-        if (ObjImage.complete) ctx.drawImage(ObjImage, 0, 0, canvas.width, canvas.height);
-        
-        // drawObstacles();
-        // drawPlayerCollisionBox();
-        
-        // --- Interface do Usuário (sempre por último, no topo de tudo) ---
-        if (isPlayerNear) {
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.font = 'bold 20px Arial';
-            ctx.textAlign = 'center';
-            ctx.shadowColor = 'black';
-            ctx.shadowBlur = 5;
-            ctx.fillText("Pressione 'E' para interagir", canvas.width / 2, 50);
-            ctx.shadowBlur = 0;
-        }
+    // drawObstacles();
+    // drawPlayerCollisionBox();
+    
+    if (isPlayerNear) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.font = 'bold 20px Arial';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = 'black';
+        ctx.shadowBlur = 5;
+        ctx.fillText("Pressione 'E' para interagir", canvas.width / 2, 50);
+        ctx.shadowBlur = 0;
     }
+}
 
     // --- LOOP E INÍCIO DO JOGO ---
     function gameLoop() {
@@ -217,7 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function imageLoaded() {
         imagesLoaded++;
         if (imagesLoaded === totalImages) {
-            iniciarJogoLivrodle();
+          sortearLivro();
             gameLoop();
         }
     }
@@ -244,16 +257,22 @@ document.addEventListener('keydown', (event) => {
         }
 
         // Verifica se é para interagir com o Livrodle
-        if (key.toLowerCase() === 'e' && isPlayerNear) {
-            modal.classList.add('modal-visivel');
-            stopGameLoop();
+       if (key.toLowerCase() === 'e' && isPlayerNear) {
+        modal.classList.add('modal-visivel');
+        stopGameLoop();
+
+        // --- NOVA LÓGICA CONDICIONAL ---
+        if (minigameCompleto) {
+            // Se o jogo já foi ganho, exibe o estado de vitória imediatamente.
+            exibirEstadoVitoria();
+        } else {
+            // Se não, inicia um novo jogo.
+            iniciarJogoLivrodle();
             input.focus();
-            
-            // CORREÇÃO APLICADA AQUI:
-            // Esta linha impede que o navegador execute sua ação padrão,
-            // que seria digitar a letra 'e' no campo de texto que acabou de receber o foco.
-            event.preventDefault(); 
         }
+        
+        event.preventDefault(); 
+    }
 
     // Se o modal JÁ ESTIVER visível, controla o Enter e o Escape
     } else {
@@ -303,20 +322,40 @@ document.addEventListener('keydown', (event) => {
         modal.classList.remove('modal-visivel');
         gameLoop();
     }
+    
     function iniciarJogoLivrodle() {
-        sortearLivro();
-        if (registroPalpites) registroPalpites.innerHTML = "";
-        if (input) input.value = "";
-        if (sugestoesDiv) sugestoesDiv.innerHTML = "";
-        if (guessButton) {
-            guessButton.disabled = false;
-            guessButton.textContent = "Adivinhar";
-            guessButton.onclick = processarPalpite;
-        }
+    if (minigameCompleto) return; 
+
+    if (registroPalpites) registroPalpites.innerHTML = "";
+    if (input) {
+        input.value = "";
+        input.disabled = false;
     }
+    if (sugestoesDiv) sugestoesDiv.innerHTML = "";
+
+    tituloModal.textContent = "???";
+    colunaEsquerda.classList.remove('fade-out'); 
+    
+    if (guessButton) {
+        guessButton.disabled = false;
+        guessButton.textContent = "Adivinhar";
+        guessButton.onclick = processarPalpite;
+    }
+  }
+
     function sortearLivro() {
         const indiceAleatorio = Math.floor(Math.random() * biblioteca.length);
         livroSecreto = biblioteca[indiceAleatorio];
+        
+        console.log("O livro secreto sorteado é:", livroSecreto.nome);
+    }
+    
+      function exibirEstadoVitoria() {
+        tituloModal.textContent = livroSecreto.nome;
+        colunaEsquerda.classList.add('fade-out'); 
+        input.disabled = true;
+        guessButton.disabled = true;
+        guessButton.textContent = "Concluído";
     }
 
     function mostrarNotificacao(mensagem, tipo = 'erro') {
@@ -330,7 +369,6 @@ document.addEventListener('keydown', (event) => {
         const tentativa = input.value.trim();
         const livroPalpite = biblioteca.find(livro => livro.nome.toLowerCase() === tentativa.toLowerCase());
         if (!livroPalpite) {
-            mostrarNotificacao("Livro incorreto!");
             return;
         }
         const linhaRegistro = document.createElement("div");
@@ -358,10 +396,18 @@ document.addEventListener('keydown', (event) => {
         input.value = "";
         if (livroPalpite.nome === livroSecreto.nome) {
             mostrarNotificacao("🎉 Parabéns! Você acertou! 🎉", "vitoria");
-            guessButton.disabled = true;
-            guessButton.textContent = "Jogar Novamente";
-            guessButton.onclick = iniciarJogoLivrodle;
-        }
+           
+        minigameCompleto = true; 
+
+        tituloModal.textContent = livroSecreto.nome;
+
+        linhaRegistro.classList.add('vitoria-final');
+
+        colunaEsquerda.classList.add('fade-out');
+   
+        input.disabled = true;
+        guessButton.disabled = true;
+      }
     }
 
     if (input) {
