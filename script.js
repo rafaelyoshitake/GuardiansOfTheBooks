@@ -42,13 +42,50 @@ document.addEventListener('DOMContentLoaded', () => {
         tiltAngle: 0
     };
     
-    let AJUSTE_X = 10.5; // Nosso controle para o eixo X
-    let AJUSTE_Y = 75;  // Nosso controle para o eixo Y
+    let AJUSTE_X = 10.5;
+    let AJUSTE_Y = 75; 
     
     characterCanvas.width = player.spriteWidth * 2;
     characterCanvas.height = player.spriteHeight * 2;
 
-    const LivroSec = { x: 170, y: 300, width: 5, height: 5, color: 'gold' };
+   const livrosInterativos = [
+    { 
+        id: 'livro_1', 
+        x: 170, y: 300, width: 5, height: 5, 
+        livroSecreto: null, // 
+        completo: false     
+    },
+    { 
+        id: 'livro_2', 
+        x: 870, y: 190, width: 5, height: 10, 
+        livroSecreto: null, 
+        completo: false 
+    },
+    { 
+        id: 'livro_3', 
+        x: 820, y: 60, width: 5, height: 5, 
+        livroSecreto: null, 
+        completo: false 
+    },
+    { 
+        id: 'livro_4', 
+        x: 960, y: 400, width: 5, height: 5, 
+        livroSecreto: null, 
+        completo: false 
+    },
+    { 
+        id: 'livro_5', 
+        x: 650, y: 380, width: 5, height: 5, 
+        livroSecreto: null, 
+        completo: false 
+    },
+    { 
+        id: 'livro_6', 
+        x: 950, y: 540, width: 5, height: 5, 
+        livroSecreto: null, 
+        completo: false 
+    }
+];
     
     const obstaculos = [
         // Estante inferior esquerda
@@ -88,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     // --- VARIÁVEIS DE ESTADO DO JOGO ---
-    let isPlayerNear = false;
+    let livroProximo = null;
     let animationFrameId = null;
     let isMoving = false;
     let gameFrame = 0;
@@ -111,6 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
       // Desenha a caixa usando as coordenadas lógicas do jogador
       ctx.fillRect(player.x, player.y, player.width, player.height);
   }
+  
+  function drawInteractiveBookHitboxes() {
+    ctx.fillStyle = 'rgba(255, 255, 255,)'; // Amarelo-dourado semi-transparente
+    for (const livro of livrosInterativos) {
+        // Desenha um retângulo na posição exata da hitbox de cada livro
+        ctx.fillRect(livro.x, livro.y, livro.width, livro.height);
+    }
+}
     
     // --- FUNÇÕES DE DESENHO ---
     function drawCharacterOnBuffer() {
@@ -177,10 +222,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         gameFrame++;
         
-        const dx = (player.x + player.width / 2) - (LivroSec.x + LivroSec.width / 2);
-        const dy = (player.y + player.height / 2) - (LivroSec.y + LivroSec.height / 2);
-        isPlayerNear = Math.sqrt(dx * dx + dy * dy) < 60;
+       let livroEncontrado = null;
+    for (const livro of livrosInterativos) {
+        const dx = (player.x + player.width / 2) - (livro.x + livro.width / 2);
+        const dy = (player.y + player.height / 2) - (livro.y + livro.height / 2);
+        const distancia = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distancia < 60) {
+            livroEncontrado = livro;
+            break; // Encontramos um livro, não precisa checar os outros
+        }
     }
+    livroProximo = livroEncontrado;
+}
     
     // --- FUNÇÃO PRINCIPAL DE DESENHO ---
   function draw() {
@@ -206,8 +260,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // drawObstacles();
     // drawPlayerCollisionBox();
+    // drawInteractiveBookHitboxes()
     
-    if (isPlayerNear) {
+   if (livroProximo && !livroProximo.completo) {
         ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
         ctx.font = 'bold 20px Arial';
         ctx.textAlign = 'center';
@@ -230,7 +285,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function imageLoaded() {
         imagesLoaded++;
         if (imagesLoaded === totalImages) {
-          sortearLivro();
+          associarLivrosSecretos();
             gameLoop();
         }
     }
@@ -243,55 +298,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- CONTROLES DE TECLADO ---
 document.addEventListener('keydown', (event) => {
-    // Definimos a tecla aqui para ser usada em toda a função
-    const key = event.key;
+    // Usar toLowerCase() garante consistência (ex: 'e' e 'E' funcionam)
+    const key = event.key.toLowerCase();
 
     // Se o modal NÃO estiver visível, controla o personagem e a abertura do modal
     if (!modal.classList.contains('modal-visivel')) {
-
         // Lógica para registrar quais teclas de movimento estão pressionadas
-        if (keys.hasOwnProperty(key.toLowerCase())) {
-            keys[key.toLowerCase()] = true;
-        } else if (keys.hasOwnProperty(key)) {
+        if (keys.hasOwnProperty(key)) {
             keys[key] = true;
         }
 
-        // Verifica se é para interagir com o Livrodle
-       if (key.toLowerCase() === 'e' && isPlayerNear) {
-        modal.classList.add('modal-visivel');
-        stopGameLoop();
+        // Verifica a interação com o livro ('e') DENTRO do listener principal
+        if (key === 'e' && livroProximo) {
+            modal.classList.add('modal-visivel');
+            stopGameLoop();
 
-        // --- NOVA LÓGICA CONDICIONAL ---
-        if (minigameCompleto) {
-            // Se o jogo já foi ganho, exibe o estado de vitória imediatamente.
-            exibirEstadoVitoria();
-        } else {
-            // Se não, inicia um novo jogo.
-            iniciarJogoLivrodle();
-            input.focus();
+            // Verifica se o minigame deste livro já foi completo
+            if (livroProximo.completo) {
+                exibirEstadoVitoria();
+            } else {
+                iniciarJogoLivrodle();
+            }
+
+            event.preventDefault(); // Previne qualquer comportamento padrão da tecla 'e'
         }
-        
-        event.preventDefault(); 
-    }
-
-    // Se o modal JÁ ESTIVER visível, controla o Enter e o Escape
-    } else {
-        if (key === 'Escape') {
+    } 
+    else {
+        if (key === 'escape') {
             fecharModal();
         }
-        if (key === 'Enter' && document.activeElement === input) {
+        if (key === 'enter' && document.activeElement === input) {
             processarPalpite();
         }
     }
 });
 
-    document.addEventListener('keyup', (event) => {
-        const key = event.key.toLowerCase();
-        if (keys.hasOwnProperty(event.key) || keys.hasOwnProperty(key)) {
-            keys[event.key] = false;
-            keys[key] = false;
-        }
-    });
+document.addEventListener('keyup', (event) => {
+    const key = event.key.toLowerCase();
+    // Lógica simplificada para registrar que a tecla foi solta
+    if (keys.hasOwnProperty(key)) {
+        keys[key] = false;
+    }
+});
 
     // --- LÓGICA DO MINIGAME LIVRODLE ---
     const biblioteca = [
@@ -343,15 +391,27 @@ document.addEventListener('keydown', (event) => {
     }
   }
 
-    function sortearLivro() {
-        const indiceAleatorio = Math.floor(Math.random() * biblioteca.length);
-        livroSecreto = biblioteca[indiceAleatorio];
-        
-        console.log("O livro secreto sorteado é:", livroSecreto.nome);
+    function associarLivrosSecretos() {
+    // Cria uma cópia da biblioteca para podermos remover itens dela sem afetar a original
+    let livrosDisponiveis = [...biblioteca];
+
+    // Embaralha o array para garantir aleatoriedade
+    livrosDisponiveis.sort(() => Math.random() - 0.5);
+
+    for (const livroInterativo of livrosInterativos) {
+        if (livrosDisponiveis.length > 0) {
+            // Pega o último livro do array embaralhado e o associa
+            livroInterativo.livroSecreto = livrosDisponiveis.pop();
+        } else {
+            console.error("Acabaram os livros da biblioteca para associar!");
+            break;
+        }
     }
+    console.log("Livros interativos com seus segredos associados:", livrosInterativos);
+  }
     
       function exibirEstadoVitoria() {
-        tituloModal.textContent = livroSecreto.nome;
+        tituloModal.textContent = livroProximo.livroSecreto.nome;
         colunaEsquerda.classList.add('fade-out'); 
         input.disabled = true;
         guessButton.disabled = true;
@@ -366,49 +426,68 @@ document.addEventListener('keydown', (event) => {
     }
 
     function processarPalpite() {
-        const tentativa = input.value.trim();
-        const livroPalpite = biblioteca.find(livro => livro.nome.toLowerCase() === tentativa.toLowerCase());
-        if (!livroPalpite) {
-            return;
-        }
-        const linhaRegistro = document.createElement("div");
-        linhaRegistro.classList.add("linha-registro");
-        const campos = ['nome', 'genero', 'ano', 'paginas', 'ambientacao', 'idioma'];
-        const labels = { nome: 'Nome', genero: 'Gênero', ano: 'Ano', paginas: 'Páginas', ambientacao: 'Ambientação', idioma: 'Idioma' };
-        campos.forEach(campo => {
-            const itemDiv = document.createElement('div');
-            itemDiv.classList.add('item-registro');
-            itemDiv.dataset.label = labels[campo] + ':';
-            let conteudo = livroPalpite[campo];
-            if (livroPalpite[campo] === livroSecreto[campo]) {
-                itemDiv.classList.add('correto');
-            } else {
-                itemDiv.classList.add('incorreto');
-                if (campo === 'ano' || campo === 'paginas') {
-                    const seta = livroPalpite[campo] < livroSecreto[campo] ? '↑' : '↓';
-                    conteudo = `${conteudo} ${seta}`;
-                }
-            }
-            itemDiv.textContent = conteudo;
-            linhaRegistro.appendChild(itemDiv);
-        });
-        registroPalpites.appendChild(linhaRegistro);
-        input.value = "";
-        if (livroPalpite.nome === livroSecreto.nome) {
-            mostrarNotificacao("🎉 Parabéns! Você acertou! 🎉", "vitoria");
-           
-        minigameCompleto = true; 
+    const tentativa = input.value.trim();
+    const livroPalpite = biblioteca.find(livro => livro.nome.toLowerCase() === tentativa.toLowerCase());
 
-        tituloModal.textContent = livroSecreto.nome;
+
+    const linhaRegistro = document.createElement("div");
+    linhaRegistro.classList.add("linha-registro");
+
+    const campos = ['nome', 'genero', 'ano', 'paginas', 'ambientacao', 'idioma'];
+    const labels = { nome: 'Nome', genero: 'Gênero', ano: 'Ano', paginas: 'Páginas', ambientacao: 'Ambientação', idioma: 'Idioma' };
+    
+    // O livro correto para comparar é sempre o que está associado ao objeto de interação atual
+    const livroCorreto = livroProximo.livroSecreto; 
+
+    campos.forEach(campo => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('item-registro');
+        itemDiv.dataset.label = labels[campo] + ':';
+        
+        let conteudo = livroPalpite[campo];
+
+        if (livroPalpite[campo] === livroCorreto[campo]) {
+            itemDiv.classList.add('correto');
+        } else {
+            itemDiv.classList.add('incorreto');
+            if (campo === 'ano' || campo === 'paginas') {
+                // A CORREÇÃO ESTÁ AQUI: Usando 'livroCorreto' em vez de 'livroSecreto'
+                const seta = livroPalpite[campo] < livroCorreto[campo] ? '↑' : '↓';
+                conteudo = `${conteudo} ${seta}`;
+            }
+        }
+        itemDiv.textContent = conteudo;
+        linhaRegistro.appendChild(itemDiv);
+    });
+
+    registroPalpites.appendChild(linhaRegistro);
+    input.value = "";
+    sugestoesDiv.innerHTML = ""; // Limpa as sugestões após o palpite
+
+    if (livroPalpite.nome === livroCorreto.nome) {
+        mostrarNotificacao("🎉 Parabéns! Você acertou! 🎉", "vitoria");
+        
+        livroProximo.completo = true; // MARCA O LIVRO ATUAL COMO COMPLETO
+        verificarTodosConcluidos();
+
+        tituloModal.textContent = livroCorreto.nome;
 
         linhaRegistro.classList.add('vitoria-final');
-
         colunaEsquerda.classList.add('fade-out');
-   
+    
         input.disabled = true;
         guessButton.disabled = true;
-      }
     }
+  }
+    
+    function verificarTodosConcluidos() {
+    const todosCompletos = livrosInterativos.every(livro => livro.completo);
+
+    if (todosCompletos) {
+        console.log("PARABÉNS! Você completou todos os desafios dos livros!");
+        // Aqui você pode acionar uma cutscene, mostrar uma mensagem final, etc.
+    }
+}
 
     if (input) {
         input.addEventListener("input", () => {
