@@ -260,7 +260,7 @@
         #dialogo-mago {
             position: absolute;
             top: 25%; /* Ajuste a posição vertical conforme necessário */
-            left: 35%;
+            left: 30%;
             transform: translateX(-50%); /* Centraliza horizontalmente */
             width: 900px; /* Tamanho do mini mago - AUMENTADO DE 100px PARA 150px */
             height: auto;
