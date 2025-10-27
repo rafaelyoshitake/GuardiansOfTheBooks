@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // --- Seletores de Tela ---
             const telaBiblioteca = document.getElementById('tela-biblioteca');
+            const telaTutorial = document.getElementById('tela-tutorial');
             const telaDialogo = document.getElementById('tela-dialogo');
             const telaJogo = document.getElementById('tela-jogo');
             const modal = document.getElementById('livrodle-modal'); 
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // --- Botões ---
             const botaoJogar = document.getElementById('botao-jogar');
             const devButton = document.getElementById('dev-button');
+            const startGameButton = document.getElementById('start-game-button');
             const closeModalBtn = document.getElementById('close-modal-btn'); 
             
             // --- Outros Elementos HTML ---
@@ -111,15 +113,11 @@ document.addEventListener('DOMContentLoaded', function() {
              // --- DEFINIÇÃO DAS FUNÇÕES ---
             
             // Função para fechar o diálogo e ir para o canvas
-            function endDialogueAndStartGame() {
+            function endDialogueAndStartTutorial() {
                 if(telaDialogo) telaDialogo.style.display = 'none';
                 if(telaDialogo) telaDialogo.classList.remove('ativa'); 
-                if(telaJogo) telaJogo.style.display = 'flex';
-                
-                if (!animationFrameId && imagesLoaded === totalImages) {
-                    gameStarted = true; 
-                    gameLoop(); // Chama gameLoop que agora está definida
-                }
+                if(telaTutorial) telaTutorial.style.display = 'flex'; // Mostra o tutorial
+                // Não mostra telaJogo ainda
             }
              
             // --- Funções de Desenho e Jogo ---
@@ -433,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function() {
              // --- ADIÇÃO DOS EVENT LISTENERS ---
 
              // --- Lógica de Transição de Tela ---
-            if (botaoJogar) {
+             if (botaoJogar) {
                 botaoJogar.addEventListener('click', function(event) {
                     event.stopPropagation(); 
                     if(telaBiblioteca) telaBiblioteca.style.display = 'none';
@@ -443,9 +441,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         if(telaDialogo) telaDialogo.classList.add('ativa'); 
                     }, 10);
                     
+                    // Chama a função que agora inicia o tutorial
                     setTimeout(function() {
-                        endDialogueAndStartGame(); // Chama a função que agora está definida
+                        endDialogueAndStartTutorial(); // Renomeado para clareza
                     }, 9000); 
+                });
+            }
+            
+            // NOVO: Listener para o botão Iniciar Jogo do Tutorial
+            if (startGameButton) {
+                startGameButton.addEventListener('click', function() {
+                    if (telaTutorial) telaTutorial.style.display = 'none'; // Esconde o tutorial
+                    if (telaJogo) telaJogo.style.display = 'flex'; // Mostra o jogo
+
+                    // Inicia o jogo DEPOIS de fechar o tutorial
+                    if (!animationFrameId && imagesLoaded === totalImages) {
+                         if (!gameStarted) { gameStarted = true; }
+                         gameLoop();
+                     }
                 });
             }
             
