@@ -8,23 +8,56 @@
     <title> GOTB </title>
 </head>
 <body>
-   <canvas id="gameCanvas" width="1280" height="720"></canvas>
+           <div class="library-container">
+            <h1 class="main-title">Guardians Of The Books</h1>
+            <div class="tome-selection">
+                <div class="tome-wrapper">
+                    <div class="tome" id="botao-jogar">Jogar</div>
+                    </div>
+                </div>
+                <div class="tome-wrapper">
+                    <div class="tome" id="dev-button">Desenvolvedores</div>
+                    <div class="tome-details">
+                        <h2>Os Desenvolvedores</h2> 
+                        <p class="author">Senai</p>
+                        <p class="description">O jogo foi inteiramente criado por Izabella de Almeida, Kaio Henrique, Marcos Dexter, Maria Eduarda Moreira e Rafael Yoshitake.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <div id="livrodle-modal" class="modal-container">
+      <div id="tela-dialogo">
+        <img id="dialogo-mago" src="https://uploads.onecompiler.io/43s2hj2ds/43zmzq89t/mag.png" alt="Mini Mago Flutuante">
+        <div class="dialogue-container">
+            <div class="dialogue-box box1">
+                <p>A história está sendo apagada. O silêncio consome o passado, mas você, jovem Guardião, consegue ouvir os ecos do que foi perdido.</p>
+            </div>
+            <div class="dialogue-box box2">
+                <p>Decifre os enigmas dos Livros Perdidos. Conecte as pistas e reescreva o que o tempo tentou esquecer antes que tudo se perca para sempre.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="tela-jogo">
+        <canvas id="gameCanvas" width="1280" height="720"></canvas>
+    </div>
+
+      <div id="livrodle-modal" class="modal-container">
         <div class="livrodle-content">
-          <span class="close-button" id="close-modal-btn">&times;</span>
+            <span class="close-button" id="close-modal-btn">&times;</span>
             <div id="notificador"></div>
 
-            <h1 class="title"> ??? </h1>
+            <h1 class="title">Decifre o Livro Perdido</h1>
 
             <div class="game-area">
                 <div class="coluna-esquerda">
-                     <h2 class="selecao-title">Adivinhe o Livro</h2>
-                     <div class="adivinhar-liv">
-                         <input type="text" class="adivinhar-entrada" id="adv-input" placeholder="Digite o nome do livro...">
-                         <div class="sugestoes" id="sugestoes-livros"></div>
-                         <button class="adv-btao" id="adv-btao">Adivinhar</button>
-                     </div>
+                    <h2 class="selecao-title">Adivinhe o Livro</h2>
+                    <div class="adivinhar-liv">
+                        <input type="text" class="adivinhar-entrada" id="adv-input" placeholder="Digite o nome do livro...">
+                        <div class="sugestoes" id="sugestoes-livros"></div>
+                        <button class="adv-btao" id="adv-btao">Adivinhar</button>
+                    </div>
                 </div>
 
                 <div class="coluna-direita">
@@ -39,13 +72,13 @@
                             <div class="item-cabecalho">Idioma</div>
                         </div>
                         <div id="registro-palpites">
-                           
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    
     
 </body>
 </html>
