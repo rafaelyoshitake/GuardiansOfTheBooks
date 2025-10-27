@@ -23,6 +23,80 @@
             font-family: var(--fonte-corpo);
         }
 
+        #tela-tutorial {
+            display: none; /* Começa escondido */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro semi-transparente */
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 9; /* Acima do jogo, abaixo da biblioteca */
+            color: var(--cor-texto-escuro);
+            font-family: var(--fonte-corpo);
+        }
+
+        .tutorial-content {
+            background-color: var(--cor-pergaminho);
+            border: 3px solid var(--cor-madeira-escura);
+            border-radius: 10px;
+            padding: 30px 40px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            line-height: 1.7;
+        }
+
+        .tutorial-content h2 {
+            font-family: var(--fonte-titulo);
+            color: var(--cor-madeira-escura);
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 1px solid var(--cor-madeira-clara);
+            padding-bottom: 10px;
+        }
+
+        .tutorial-content p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+         .tutorial-content ul {
+             padding-left: 20px;
+             margin-bottom: 20px;
+         }
+         .tutorial-content li {
+             margin-bottom: 10px;
+         }
+         .tutorial-content strong {
+             color: var(--cor-madeira-escura);
+         }
+
+        #start-game-button {
+            display: block; /* Ocupa a linha toda */
+            margin: 30px auto 0 auto; /* Centraliza com margem acima */
+            padding: 12px 25px;
+            background-color: var(--cor-madeira-clara);
+            border: 2px solid var(--cor-madeira-escura);
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: var(--fonte-titulo);
+            color: var(--cor-pergaminho);
+            text-shadow: 1px 1px 2px var(--cor-texto-escuro);
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+        #start-game-button:hover {
+            background-color: #7e604b;
+            border-color: var(--cor-dourado);
+            transform: scale(1.03);
+        }
+
         /* --- TELA DA BIBLIOTECA --- */
          #tela-biblioteca {
           background-color: var(--cor-madeira-escura);
@@ -89,6 +163,8 @@
             text-shadow: 1px 1px 2px var(--cor-texto-escuro);
             text-align: center;
             text-decoration: none; 
+            min-width: 150px; 
+            height: 20px; 
         }
 
         .tome:hover {
