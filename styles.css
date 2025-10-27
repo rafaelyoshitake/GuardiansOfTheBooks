@@ -7,13 +7,270 @@
             background-color: #333; /* Fundo escuro atrás de tudo */
           }
         
-          canvas {
-              background-color: #2c3e50;
-              border: 2px solid #5c4033;
-              border-radius: 5px;
-          }
+           :root {
+            --cor-madeira-escura: #382c1d;
+            --cor-madeira-clara: #6b4f3a;
+            --cor-pergaminho: #f5eeda;
+            --cor-texto-escuro: #2c2c2c;
+            --cor-dourado: #c9a45f;
+            --fonte-titulo: 'Cinzel', serif;
+            --fonte-corpo: 'Lora', serif;
+        }
 
-        /* ----- ESTILOS DO MODAL ----- */
+        body {
+            margin: 0;
+            background-color: #000;
+            font-family: var(--fonte-corpo);
+        }
+
+        /* --- TELA DA BIBLIOTECA --- */
+         #tela-biblioteca {
+          background-color: var(--cor-madeira-escura);
+          background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"%3E%3Cg fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Cpath opacity=".5" d="M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z"/%3E%3Cpath d="M6 5V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h4V0h1v5h5v1h-5v4h5v1h-5v4h5v1h-5v4h5v1h-5v4h5v1h-5v4h5v1h-5v4h5v1h-5v4h5v1h-5v4h5v1h-5v4h5v1h-5v4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6v-1h4v-4H6V5z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+          display: flex; /* Começa visível */
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+          box-sizing: border-box;
+          /* --- Correções --- */
+          position: absolute; 
+          top: 0;             
+          left: 0;            
+          width: 100%;        
+          min-height: 100vh;  
+          z-index: 10;        /* Mais alto */
+      }
+
+        .library-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--cor-dourado);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .main-title {
+            font-family: var(--fonte-titulo);
+            color: var(--cor-dourado);
+            text-align: center;
+            font-size: 2.5em;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 5px var(--cor-texto-escuro);
+            margin: 0 0 40px 0;
+        }
+
+        .tome-selection {
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .tome-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tome {
+            padding: 10px 20px;
+            background-color: var(--cor-madeira-clara);
+            border: 2px solid var(--cor-madeira-escura);
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+            font-family: var(--fonte-titulo);
+            color: var(--cor-pergaminho);
+            text-shadow: 1px 1px 2px var(--cor-texto-escuro);
+            text-align: center;
+            text-decoration: none; 
+        }
+
+        .tome:hover {
+            transform: scale(1.05);
+            background-color: #7e604b;
+        }
+
+        .tome.active {
+            border-color: var(--cor-dourado);
+            background-color: #553e2d;
+            box-shadow: 0 0 15px var(--cor-dourado);
+            transform: scale(1.05);
+        }
+
+        .tome-details {
+            position: absolute;
+            bottom: 100%; 
+            left: 50%;
+            transform: translateX(-50%) translateY(-15px); 
+            width: 300px;
+            padding: 20px;
+            background-color: var(--cor-pergaminho);
+            border: 1px solid #d3c8a9;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            color: var(--cor-texto-escuro);
+            z-index: 10;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+        }
+
+        .tome-details.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        .tome-details h2 {
+            font-family: var(--fonte-titulo);
+            font-size: 1.5em;
+            margin: 0 0 5px 0;
+            color: var(--cor-madeira-escura);
+        }
+
+        .tome-details .author {
+            font-family: var(--fonte-corpo);
+            font-size: 1em;
+            font-style: italic;
+            margin: 0 0 15px 0;
+            color: var(--cor-madeira-clara);
+        }
+
+        .tome-details .description {
+            font-family: var(--fonte-corpo);
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+
+        /* --- TELA DE DIÁLOGO --- */
+        #tela-dialogo {
+        font-family: 'Georgia', serif;
+        background-color: #2c2c2c;
+        color: #f0f0f0;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        box-sizing: border-box;
+        overflow: hidden; 
+        display: none;      /* Começa escondido */
+         /* --- Correções --- */
+        position: absolute; 
+        top: 0;             
+        left: 0;            
+        width: 100%;        
+        min-height: 100vh;  
+        z-index: 9;         /* Meio */
+    }
+
+        .dialogue-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            position: relative; /* Para z-index se as caixas de diálogo precisarem ficar acima */
+            z-index: 2; /* Garante que as caixas de diálogo fiquem acima do fundo, mas abaixo do mago, se necessário */
+        }
+
+        /* NOVO ESTILO: Mago do Diálogo */
+        #dialogo-mago {
+            position: absolute;
+            top: 25%; /* Ajuste a posição vertical conforme necessário */
+            left: 35%;
+            transform: translateX(-50%); /* Centraliza horizontalmente */
+            width: 900px; /* Tamanho do mini mago - AUMENTADO DE 100px PARA 150px */
+            height: auto;
+            z-index: 3; /* Garante que o mago fique acima das caixas de diálogo */
+            opacity: 0; /* Começa invisível */
+            transition: opacity 0.5s ease-out; /* Transição suave para aparecer/desaparecer */
+        }
+
+        #tela-dialogo.ativa #dialogo-mago {
+            opacity: 1; /* Fica visível quando a tela de diálogo está ativa */
+            animation: floatMago 4s infinite ease-in-out; /* Animação de flutuação */
+        }
+
+        @keyframes floatMago {
+            0% { transform: translateX(-50%) translateY(0px); }
+            50% { transform: translateX(-50%) translateY(-15px); } /* Sobe 15px */
+            100% { transform: translateX(-50%) translateY(0px); }
+        }
+
+
+        .dialogue-box {
+            position: relative;
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 30px;
+            max-width: 450px;
+            border: 2px solid #555;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            text-align: center;
+            opacity: 0;
+        }
+        
+        #tela-dialogo.ativa .dialogue-box {
+             animation: 
+                 fadeInBox 1s ease-out forwards,
+                 pulseBorder 4s infinite ease-in-out 1s;
+        }
+
+        .dialogue-box p {
+            margin: 0;
+            font-size: 1.3em;
+            font-style: italic;
+            line-height: 1.6;
+            opacity: 0; 
+        }
+
+        #tela-dialogo.ativa .dialogue-box.box1 p {
+            animation: fadeInText 1s ease-out 1.2s forwards;
+        }
+        
+        #tela-dialogo.ativa .dialogue-box.box2 {
+             animation: 
+                 fadeInBox 1s ease-out 5.5s forwards,
+                 pulseBorder 4s infinite ease-in-out 6.5s;
+        }
+
+        #tela-dialogo.ativa .dialogue-box.box2 p {
+            animation: fadeInText 1s ease-out 6.0s forwards;
+        }
+
+
+        /* --- TELA DO JOGO (NOVO) --- */
+        #tela-jogo {
+        display: flex; /* Mantido flex para centralizar o canvas */
+        justify-content: center;
+        align-items: center;
+        background-color: #111;
+        display: none;      /* Começa escondido */
+         /* --- Correções --- */
+        position: absolute; 
+        top: 0;             
+        left: 0;            
+        width: 100%;        
+        min-height: 100vh;  
+        z-index: 8;         /* Mais baixo */
+      }
+
+        #gameCanvas {
+            max-width: 100%;
+            height: auto;
+            border: 2px solid var(--cor-dourado);
+            border-radius: 8px;
+            background-color: #000;
+        }
+
+        /* ----- ESTILOS DO MODAL (NOVO CSS) ----- */
         .modal-container {
             display: none; /* Escondido por padrão */
             position: fixed;
@@ -26,6 +283,8 @@
             align-items: center;
             z-index: 1000;
             overflow-y: auto; /* Permite rolagem se o conteúdo for muito grande */
+            padding: 20px; /* Adicionado para evitar que o modal cole nas bordas */
+            box-sizing: border-box; /* Garante que o padding seja incluído */
         }
 
         .modal-visivel {
@@ -44,9 +303,11 @@
             font-family: 'Georgia', serif;  
             line-height: 1.6;
             position: relative; /* Para posicionar o notificador */
+            max-height: 90vh; /* Adicionado para garantir que caiba na tela */
+            overflow-y: auto; /* Adicionado para conteúdo interno */
         }
 
-        .title {
+        .livrodle-content .title {
             text-align: center;
             margin-top: 0;
             margin-bottom: 25px;
@@ -67,9 +328,9 @@
             transition: color 0.2s ease;
         }
 
-      .close-button:hover {
-          color: #5c4033; /* Cor do título ao passar o mouse */
-      }
+       .close-button:hover {
+           color: #5c4033; /* Cor do título ao passar o mouse */
+       }
         
         /* Container das colunas (input e registro) */
         .game-area {
@@ -79,6 +340,8 @@
         
         .coluna-esquerda, .coluna-direita {
             width: 50%;
+            display: flex; /* Adicionado */
+            flex-direction: column; /* Adicionado */
         }
 
         .selecao-title {
@@ -96,7 +359,7 @@
         }
 
         .adivinhar-entrada {
-            width: calc(100% - 22px);
+            width: 100%; /* Alterado de calc(100% - 22px) */
             padding: 10px;
             border: 1px solid #c8bba8;
             background-color: #fffaf0;
@@ -104,6 +367,7 @@
             font-family: inherit;
             font-size: 1em;
             color: #3d2c1c;
+            box-sizing: border-box; /* Adicionado */
         }
 
         .sugestoes {
@@ -113,7 +377,8 @@
             overflow-y: auto;
             background-color: #fffaf0;
             position: absolute;
-            width: calc(100% - 2px); /* Largura total do input */
+            width: 100%; /* Alterado de calc(100% - 2px) */
+            box-sizing: border-box; /* Adicionado */
             z-index: 10;
         }
 
@@ -178,6 +443,11 @@
         /* --- Estilos da grade de registros --- */
         .registro-livros {
             color: #3d2c1c;
+            flex-grow: 1; /* Adicionado */
+        }
+        
+        #registro-palpites {
+            flex-grow: 1; /* Adicionado */
         }
 
         .cabecalho-registro, .linha-registro {
@@ -228,11 +498,23 @@
             background-color: #d3d3d3 !important; /* Cinza claro */
             border-color: #b0b0b0 !important;
         }
+        
+        /* Feedback de vitória (para a linha toda) */
+        .linha-registro.vitoria-final .item-registro {
+            animation: pulse-green 1s ease-in-out;
+        }
+
+        @keyframes pulse-green {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); background-color: #a0f0a0; }
+            100% { transform: scale(1); }
+        }
+
 
         /* --- Notificador --- */
         #notificador {
             display: none;
-            position: absolute;
+            position: absolute; /* Mudado de absolute para sticky */
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
@@ -243,7 +525,10 @@
             z-index: 1001;
             font-size: 1em;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-family: var(--fonte-corpo); /* Usando variável */
+            font-weight: bold;
         }
+        
         #notificador.vitoria {
              background-color: #4c4;
         }
@@ -260,30 +545,51 @@
                 display: none; /* Esconde o cabeçalho em telas pequenas para economizar espaço */
             }
             .linha-registro {
-                 grid-template-columns: 1fr; /* Empilha os itens */
-                 border: 1px solid #c8bba8;
-                 padding: 10px;
-                 margin-bottom: 10px;
-                 border-radius: 5px;
+                grid-template-columns: 1fr; /* Empilha os itens */
+                border: 1px solid #c8bba8;
+                padding: 10px;
+                margin-bottom: 10px;
+                border-radius: 5px;
+            }
+            .item-registro {
+                justify-content: flex-start !important; /* Alinha à esquerda */
+                text-align: left;
             }
             .item-registro::before {
                 content: attr(data-label); /* Adiciona o label antes do conteúdo */
                 font-weight: bold;
                 margin-right: 10px;
                 color: #5c4033;
+                display: inline-block; /* Garante alinhamento */
+                width: 90px; /* Largura fixa para os labels */
             }
         }
         
 
-      .game-area.fade-out, 
-      .coluna-esquerda.fade-out {
-          width: 0; 
-          padding: 0; 
-          margin: 0;
-          overflow: hidden; 
-      }
-      
-      .coluna-esquerda.fade-out + .coluna-direita {
-          width: 100%;
-      }
-      
+       .game-area.fade-out, 
+       .coluna-esquerda.fade-out {
+            width: 0; 
+            padding: 0; 
+            margin: 0;
+            opacity: 0; /* Adicionado para suavizar */
+            overflow: hidden; 
+            transition: all 0.5s ease;
+       }
+       
+       .coluna-esquerda.fade-out + .coluna-direita {
+            width: 100%;
+            transition: width 0.5s ease;
+       }
+        
+
+        /* --- KEYFRAMES (Animações) --- */
+
+        @keyframes fadeInBox {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInText {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
